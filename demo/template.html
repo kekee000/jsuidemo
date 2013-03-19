@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>模板测试</title>
+<script type="text/javascript" src="../src/template.js"></script>
+</head>
+<body>
+<textarea id="template-test" style="width:400px;height:400px;float:left">
+    <h1>header</h1>
+        {for:eee as a}
+            <ul>
+                {for:a.ddd as ccc}
+                    {if:ccc>10}
+                    <li style="color:green">#{ccc}</li>
+                    {elseif:ccc@index < 5}
+                    <li style='color:yellow'>#{ccc}</li>
+                    {else:}
+                    <li style='color:red'>#{ccc}</li>
+                    {/if}
+                    <li style='color:blue'>#{ccc@index}</li>
+                    <li style='color:blue'>#{ccc@first}</li>
+                    <li style='color:blue'>#{ccc@last}</li>
+                {/for}
+                <h3>#{a.bbb}</h3>
+                <h3>#{ccc}</h3>
+            </ul>
+            
+            <ul>
+                {for:aaa as ccc}
+                    <li style='color:green'>#{ccc}</li>
+                {/for}
+            </ul>
+            
+        {/for}
+   <h1>footer</h1>
+</textarea>
+
+<div id="template-exec-test" style="width:400px;height:400px;float:left">
+</div>
+
+
+
+<script type="text/javascript">
+    function g(id) {return document.getElementById(id)}
+    var text =g('template-test').value;
+    var template = new Template();
+    var scope = {
+      aaa : [1,2,3,4,5,6,7],
+      ccc : 1000,
+      eee: [{
+          ddd:[1,10,23],
+          bbb : 'ok'
+      }]
+    };
+    var time1 = new Date().getTime();
+    for(var i=0;i<1000;i++){
+        var compiled = template.parse(text);
+        var txt = template.exec(compiled, scope);
+    }
+    var time2 = new Date().getTime();
+    console.log(time2-time1);
+    g('template-exec-test').innerHTML = txt;
+    
+</script>
+</body>
+</html>
