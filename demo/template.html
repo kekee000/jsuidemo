@@ -31,7 +31,13 @@
                     <li style='color:green'>#{ccc}</li>
                 {/for}
             </ul>
-            
+            <ul>
+                {for:fff as key:value}
+                    <li style='color:green'>#{key}</li>
+                    <li style='color:red'>#{value}</li>
+                    <li style='color:yellow'>#{value.length}</li>
+                {/for}
+            </ul> 
         {/for}
    <h1>footer</h1>
 </textarea>
@@ -51,15 +57,19 @@
       eee: [{
           ddd:[1,10,23],
           bbb : 'ok'
-      }]
+      }],
+      fff: {
+        aaa: 'aaa',
+        bbb: 'bbb',
+        ccc: 'ccc',
+      }
     };
-    var time1 = new Date().getTime();
-    for(var i=0;i<1000;i++){
+    console.time('execute');
+    //for(var i=0;i<1000;i++){
         var compiled = template.parse(text);
         var txt = template.exec(compiled, scope);
-    }
-    var time2 = new Date().getTime();
-    console.log(time2-time1);
+    //}
+    console.timeEnd('execute');
     g('template-exec-test').innerHTML = txt;
     
 </script>

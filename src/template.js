@@ -8,7 +8,13 @@
     {/for}
     #{bbb@first}
     #{bbb@last}
+
     #{bbb@index}
+    {for:aaa as key:value}
+    {/for}
+    #{key}
+    #{value.xxx}
+
     (2) if:
     {if:aaa>10&&ccc>1}
     {elseif:}
@@ -41,7 +47,7 @@ var Template = function(options){
     
     //去除冗余节点
     function strip(tmpText) {
-        return tmpText.replace(/[\r\t\n]/g, '').replace(/[\t\s]/g, ' ');
+        return tmpText.replace(/[\r\t\n]/g, ' ').replace(/\s+/g, ' ');
     }
     
     //解析tag
@@ -119,14 +125,30 @@ var Template = function(options){
                 'for' : function(tag) {
                     var sp = tag.content.split('as');
                     var lst = trim(sp[0]);
-                    var name = trim(sp[1]);
-                    var iter = '_i' + guid++;
-                    lst = replaceVar(lst);
-                    strBuilder.push('for(var '+iter+'=0,'+name+';'+name+'='+lst+'['+iter+'];'+iter+'++){');
-                    for_stack.push({
-                        iter : iter,
-                        lst : lst
-                    });
+                    var name;
+                    var iter;
+                    //支持数组
+                    if(sp[1].indexOf(':') ==-1) {
+                        name = trim(sp[1]);
+                        iter = '_i' + guid++;
+                        lst = replaceVar(lst);
+                        strBuilder.push('for(var '+iter+'=0,'+name+';'+name+'='+lst+'['+iter+'];'+iter+'++){');
+                        for_stack.push({
+                            iter : iter,
+                            lst : lst
+                        });
+                    }
+                    //支持hash数组
+                    else {
+                        sp[1] = sp[1].split(':');
+                        name = trim(sp[1][0]);
+                        iter = trim(sp[1][1]);
+                        lst = replaceVar(lst);
+                        strBuilder.push('for(var '+name+' in '+lst+'){');
+                        strBuilder.push('var '+iter+'='+lst+'['+name+'];');
+                        for_stack.push(iter);
+                    }
+
                     for_stack.push(name);
                 },
                 'if' : function(tag) {
