@@ -8,8 +8,8 @@
     {/for}
     #{bbb@first}
     #{bbb@last}
-
     #{bbb@index}
+    
     {for:aaa as key:value}
     {/for}
     #{key}

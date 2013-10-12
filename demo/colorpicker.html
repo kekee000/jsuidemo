@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>颜色选取测试</title>
+<script src="../lib/tangram-1.5.2.2.source.js"></script>
+<script src="../src/colorpicker.js"></script>
+</head>
+<body>
+
+<input type="text" id="colorpick">
+
+<script type="text/javascript">
+T.on(T.g('colorpick'), 'focus', function() {
+    ColorPicker.pick(this)
+})
+</script>
+</body>
+</html>
